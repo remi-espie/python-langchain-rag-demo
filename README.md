@@ -1,2 +1,32 @@
-# python-langchain-rag-demo
- A demo of a CLI RAG app that uses LangChain and Ollama
+# Python / LangChain / Ollama RAG Demo
+
+This is the code that we used in [the May 31 Crafting Intelligent Python Apps with Retrieval-Augmented Generation Open Space](https://that.us/activities/Z1OU4WMZonDxDDk2L1t2).  This is a command line interface (CLI) app but you can expand it to be a web service.  This should run on a Windows PC but these instructions assume that you are using MacOS.
+
+## Steps to run this locally
+
+1. [Install Ollama on your computer](https://ollama.com/download)
+2. Pull down this project from [Github](https://github.com/steinbring)
+3. Navigate to the project folder in [iterm2](https://iterm2.com/) (or Terminal)
+4. Set up your Python virtual environment
+	1. `pip install virtualenv` (if needed)
+	2. `python3 -m venv ragdemo`
+	3. `source ragdemo/bin/activate`
+5. Install LangChain, beautifulsoup4, tiktoken, and Chroma DB
+	1. `pip install langchain_community`
+	2. `pip install beautifulsoup4`
+	3. `pip install tiktoken`
+	4. `pip install chromadb`
+6. Run the app (making an actual query)
+	1. `python3 app.py "What did apple announce?"`
+
+## Are you having trouble running this?
+
+Feel free to contact me on [Mastodon](https://toot.works/@joe) or [Signal](https://signal.me/#eu/wYx/v3zx0aPCt1RvLXBtCTcrKGWK0hJiIw2JpsQatK5UCSN9YMpDurXTeZ11atLj)
+
+## Can you do this without LangChain?
+
+Yeah, as of last month, you can.  I wrote [an article about how to do it](https://jws.news/2024/how-to-get-ai-to-tell-you-the-flavor-of-the-day-at-kopps/).
+
+## What if I missed this Open Space?
+
+[I am planning on doing it again on June 28 (the last Friday of the month)](https://that.us/activities/5EI62c1gogbMFYMqilkP)
