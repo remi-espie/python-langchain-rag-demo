@@ -7,6 +7,10 @@ This is the code that we used in [the May 31 Crafting Intelligent Python Apps wi
 1. [Install Ollama on your computer](https://ollama.com/download)
 2. Pull down this project from [Github](https://github.com/steinbring)
 3. Navigate to the project folder in [iterm2](https://iterm2.com/) (or Terminal)
+4. Pull down phi3
+	1. `ollama pull phi3`
+5. Pull down nomic-embed-text
+	1. `ollama pull nomic-embed-text`
 4. Set up your Python virtual environment
 	1. `pip install virtualenv` (if needed)
 	2. `python3 -m venv ragdemo`
