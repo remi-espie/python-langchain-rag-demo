@@ -33,4 +33,4 @@ Yeah, as of last month, you can.  I wrote [an article about how to do it](https:
 
 ## What if I missed this Open Space?
 
-[I am planning on doing it again on June 28 (the last Friday of the month)](https://that.us/activities/5EI62c1gogbMFYMqilkP)
+[I am planning on presenting "The Scoop on Embedding: Teaching Large Language Models the 'Flavor of the Day' at Culvers" on August 23 at DevCon Midwest](https://events.nvisia.com/conference/be3edb0f-815e-48dd-9826-9b62f6fbc93a)
