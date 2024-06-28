@@ -1,6 +1,6 @@
 # Python / LangChain / Ollama RAG Demo
 
-This is the code that we used in [the May 31 Crafting Intelligent Python Apps with Retrieval-Augmented Generation Open Space](https://that.us/activities/Z1OU4WMZonDxDDk2L1t2).  This is a command line interface (CLI) app but you can expand it to be a web service.  This should run on a Windows PC but these instructions assume that you are using MacOS.
+This is the code that we used in [the June 28 Crafting Intelligent Python Apps with Retrieval-Augmented Generation Open Space](https://that.us/activities/5EI62c1gogbMFYMqilkP).  This is a command line interface (CLI) app but you can expand it to be a web service.  This should run on a Windows PC but these instructions assume that you are using MacOS.
 
 ## Steps to run this locally
 
