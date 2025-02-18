@@ -1,8 +1,11 @@
 import sys
+import pandas as pd
+import re
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.vectorstores import Chroma
 from langchain_community import embeddings
 from langchain_community.chat_models import ChatOllama
+from langchain_core.documents import Document
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
@@ -10,35 +13,41 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.embeddings import OllamaEmbeddings
 
 def process_input(question):
-    # Load URLs from the sources.txt file and split them at newline characters
-    with open("sources.txt", "r") as file:
-        urls_list = file.read().strip().split("\n")
-    
-    # You can use a base_url param to change the ollama instance that it uses (default is http://localhost:11434)
-    # If you don't set the cache param, it won't cache anything
-    # You can set a format param to json if you want it to output json
-    model_local = ChatOllama(model="phi3")
-    
-    # Load documents from URLs
-    docs = [WebBaseLoader(url).load() for url in urls_list]
-    docs_list = [item for sublist in docs for item in sublist]
-    
-    # This is where it "chunks" the data from the URLs
+    model_local = ChatOllama(model="phi3.5", temperature=0)
+    df = pd.read_csv("club_games_data.csv")
+    # Filter by really winned games
+    filtered_df = df[(df['white_result'] == 'checkmated') | (df['black_result'] == 'checkmated')]
+
+    # Get last line of each filtered game
+    game_list = filtered_df['pgn'].apply(lambda x: x.split('\n')[-2]).tolist()
+    # Remove all occurrences of `{[%clk ...]}`
+    game_list = [re.sub(r'\{\[%clk[^\{]*?\]\} [0-9]+\.\.\.', '', game) for game in game_list]
+    game_list = [re.sub(r'\{\[%clk.*?\]\}', '', game) for game in game_list]
+    game_list = ["game: " + game for game in game_list]
+    game_list = game_list[:15000]
+    combined_text = "\n".join(game_list)
+    with open("games.txt", "w") as f:
+        f.write(combined_text)
+
+    # Split the combined text into chunks
     text_splitter = CharacterTextSplitter.from_tiktoken_encoder(chunk_size=7500, chunk_overlap=100)
-    doc_splits = text_splitter.split_documents(docs_list)
+    doc_splits = text_splitter.split_text(combined_text)
+    documents = [Document(page_content=chunk) for chunk in doc_splits]
+
 
     # Create a vector store using Chroma DB, our chunked data from the URLs, and the nomic-embed-text embedding model
     vectorstore = Chroma.from_documents(
-        documents=doc_splits,
+        documents=documents,
         collection_name="rag-chroma",
         embedding=embeddings.ollama.OllamaEmbeddings(model='nomic-embed-text'),
     )
     retriever = vectorstore.as_retriever()
 
     # Create a question / answer pipeline 
-    rag_template = """Answer the question based only on the following context:
+    rag_template = """Here are lots of different chess games represented by their moves.
     {context}
-    Question: {question}
+    I'm playing a game right now. I'm playing white. Here are the current game moves: {question}. 
+    What should I play next? The move must be valid. Output only the move. Output one move between quotes. For example, "e4" or "Nf3".
     """
     rag_prompt = ChatPromptTemplate.from_template(rag_template)
     rag_chain = (
@@ -47,6 +56,7 @@ def process_input(question):
         | model_local
         | StrOutputParser()
     )
+
     # Invoke the pipeline
     return rag_chain.invoke(question)
 
