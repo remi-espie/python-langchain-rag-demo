@@ -1,15 +1,10 @@
-import csv
 import sys
 import time
 
 from textblob.classifiers import NaiveBayesClassifier, DecisionTreeClassifier, MaxEntClassifier, \
     PositiveNaiveBayesClassifier
 
-from common import TRANSFORMATION_ALLOWED, ALGORITHM_ALLOWED
-
-CLASS_KEY = 'Class Index'
-TITLE_KEY = 'Title'
-DESCRIPTION_KEY = 'Description'
+from common import TRANSFORMATION_ALLOWED, ALGORITHM_ALLOWED, transform_dataset, read_dataset
 
 TRANSFORMATION_TO_STRING = {
     'title': 'Title only',
@@ -25,21 +20,6 @@ ALGORITHM_TO_STRING = {
 }
 
 TEST_DATA_TRIM = 100
-
-
-def read_dataset(path):
-    with open(path, 'r') as file:
-        data = csv.DictReader(file)
-        return list(data)
-
-
-def transform_dataset(data, transformation):
-    if transformation == 'title':
-        return list((row[TITLE_KEY], row[CLASS_KEY]) for row in data)
-    elif transformation == 'description':
-        return list((row[DESCRIPTION_KEY], row[CLASS_KEY]) for row in data)
-    elif transformation == 'both':
-        return list((f'{row[TITLE_KEY]} {row[DESCRIPTION_KEY]}', row[CLASS_KEY]) for row in data)
 
 
 def get_classifier(algorithm):
